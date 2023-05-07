@@ -2,12 +2,15 @@ from rest_framework import serializers
 from watchwhat_app.models import Watchwhat , StreamPlatform, Review 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Review
-        fields = "__all__"
+        exclude = ('watchwhat',)
+        # fields = "__all__"
 
 class WatchwhatSerializer(serializers.ModelSerializer):
     reviews = ReviewSerializer(many = True, read_only = True)
+    
     # name_len = serializers.SerializerMethodField()
     class Meta:
         model = Watchwhat
