@@ -17,7 +17,7 @@ class WatchwhatSerializer(serializers.ModelSerializer):
         fields = "__all__"
     
     
-class StreamPlatformSerializer(serializers.HyperlinkedModelSerializer):
+class StreamPlatformSerializer(serializers.ModelSerializer):
     
     # name_len_streamPlatform = serializers.SerializerMethodField()
     # 
@@ -26,10 +26,13 @@ class StreamPlatformSerializer(serializers.HyperlinkedModelSerializer):
     #     read_only=True,
     #     view_name='Watchwhat-details'
     # )
-    url = serializers.HyperlinkedIdentityField(view_name="Watchwhat-details")
+    
+    
+    # url = serializers.HyperlinkedIdentityField(view_name="StreamPlatformDetailAV-details")
     watchwhat = WatchwhatSerializer(many = True , read_only = True)
     class Meta:
         model = StreamPlatform
+        # exclude = ['id',]
         fields = "__all__"
 
     # get_name_len_streamPlatform(self, )
