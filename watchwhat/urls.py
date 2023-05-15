@@ -19,4 +19,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('watch/', include('watchwhat_app.api.urls')),
+    path('api-path', include('rest_framework.urls')),
 ]
