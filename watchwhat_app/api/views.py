@@ -44,7 +44,7 @@ class ReviewList(generics.ListAPIView):
     
 
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [ReviewOwnerOrReadOnly]
+    permission_classes = [IsReviewOwnerOrReadOnly]
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     
@@ -63,10 +63,11 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class StreamPlatformAV(APIView):
+    permission_classes = [IsAdminOrReadOnly] 
     def get(self, request):
         platform = StreamPlatform.objects.all()
         serializer = StreamPlatformSerializer(platform, many = True, context={'request': request} )
-        return Response(serializer.data)
+        return Response("Yo mama's a HOe") #serializer.data)
     
     
     def post(self, request):
@@ -79,13 +80,13 @@ class StreamPlatformAV(APIView):
         
         
 class StreamPlatformDetailAV(APIView):
-            
+    permission_classes = [IsAdminOrReadOnly]      
     def get(self,request,pk):
         try:
             platform = StreamPlatform.objects.get(pk=pk)
         except StreamPlatform.DoesNotExist:
             return Response({
-                'Watchwhat not found'
+                'Stream not found'
             },status = status.HTTP_404_NOT_FOUND)
         serializer = StreamPlatformSerializer(platform,context={'request': request})
         return Response(serializer.data)
@@ -95,7 +96,7 @@ class StreamPlatformDetailAV(APIView):
             platform = StreamPlatform.objects.get(pk=pk)
         except StreamPlatform.DoesNotExist:
             return Response({
-                'Watchwhat not found'
+                'Stream not found'
             },status = status.HTTP_404_NOT_FOUND)
         serializer = StreamPlatformSerializer(platform, data = request.data)
         if serializer.is_valid():
@@ -116,6 +117,7 @@ class StreamPlatformDetailAV(APIView):
         return Response(status = status.HTTP_204_NO_CONTENT)
 
 class WatchwhatListAV(APIView):
+    permission_classes = [IsAdminOrReadOnly] 
     def get(self,request):
         Watchwhats =Watchwhat.objects.all()
         serializer = WatchwhatSerializer(Watchwhats,many= True, )
@@ -130,42 +132,49 @@ class WatchwhatListAV(APIView):
             return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 
-class WatchwhatDetailAV(APIView):
+class WatchwhatDetailAV(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAdminOrReadOnly]
+    queryset = Watchwhat.objects.all()
+    serializer_class = WatchwhatSerializer
+
+# class WatchwhatDetailAV(APIView):
+#     print("hello there ")
+#     permission_classes = [IsAdminOrReadOnly] 
+#     def get(self,request,pk):
+#         try:
+#             watchwhat = Watchwhat.objects.get(pk=pk)
+#         except Watchwhat.DoesNotExist:
+#             return Response({
+#                 'Watchwhat not found'
+#             },status = status.HTTP_404_NOT_FOUND)
+#         serializer = WatchwhatSerializer(watchwhat)
+#         return Response(serializer.data)
     
-    def get(self,request,pk):
-        try:
-            watchwhat = Watchwhat.objects.get(pk=pk)
-        except Watchwhat.DoesNotExist:
-            return Response({
-                'Watchwhat not found'
-            },status = status.HTTP_404_NOT_FOUND)
-        serializer = WatchwhatSerializer(watchwhat)
-        return Response(serializer.data)
-    
-    def put(self, request,pk):
-        try:
-            watchwhat = Watchwhat.objects.get(pk=pk)
-        except Watchwhat.DoesNotExist:
-            return Response({
-                'Watchwhat not found'
-            },status = status.HTTP_404_NOT_FOUND)
-        serializer = WatchwhatSerializer(watchwhat, data = request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        else :
-            return Response(serializer.errors)
+#     def put(self, request,pk):
+#         try:
+#             watchwhat = Watchwhat.objects.get(pk=pk)
+#         except Watchwhat.DoesNotExist:
+#             return Response({
+#                 'Watchwhat not found'
+#             },status = status.HTTP_404_NOT_FOUND)
+#         serializer = WatchwhatSerializer(watchwhat, data = request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         else :
+#             return Response(serializer.errors)
         
         
-    def delete(self, request,pk):
-        try:
-            Watchwhat = Watchwhat.objects.get(pk=pk)
-        except Watchwhat.DoesNotExist:
-            return Response({
-                'Watchwhat not found'
-            },status = status.HTTP_404_NOT_FOUND)
-        Watchwhat.delete()
-        return Response(status = status.HTTP_204_NO_CONTENT)#coz after deleting we have no content on that page anymore.
+#     def delete(self, request,pk):
+#         try:
+#             Watchwhat = Watchwhat.objects.get(pk=pk)
+#         except Watchwhat.DoesNotExist:
+#             return Response({
+#                 'Watchwhat not found'
+#             },status = status.HTTP_404_NOT_FOUND)
+#         Watchwhat.delete()
+#         print(" hey there is nothing")
+#         return Response("Yo mama's a Hoe" )#status = status.HTTP_204_NO_CONTENT)#coz after deleting we have no content on that page anymore.
     
 # @api_view(['GET','POST'])
 # def Watchwhat_list(request):
